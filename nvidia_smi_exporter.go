@@ -26,6 +26,12 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 	args := []string{"--query-gpu=name,index,driver_version,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used,fan.speed,power.draw,clocks.current.graphics,clocks.current.sm,clocks.current.memory,clocks.current.video,encoder.stats.sessionCount,encoder.stats.averageFps,encoder.stats.averageLatency",
 		// TODO(glynternet): try getting units and adding to description of each metric
 		"--format=csv,noheader,nounits"}
+	metricList := []string{
+		"driver_version", "temperature_gpu", "utilization_gpu",
+		"utilization_memory", "memory_total", "memory_free", "memory_used", "fan_speed", "power_draw",
+		"clocks_current_graphics", "clocks_current_sm", "clocks_current_memory", "clocks_current_video",
+		"encoder_stats_session_count", "encoder_stats_average_fps", "encoder_stats_average_latency",
+	}
 	return func(response http.ResponseWriter, request *http.Request) {
 		out, err := exec.Command(command, args...).Output()
 		if err != nil {
@@ -40,19 +46,11 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		csvReader := csv.NewReader(bytes.NewReader(out))
 		csvReader.TrimLeadingSpace = true
 		records, err := csvReader.ReadAll()
-
 		if err != nil {
 			_ = logger.Log(
 				log.Message("error reading CSV"),
 				log.Error(err))
 			return
-		}
-
-		metricList := []string{
-			"driver_version", "temperature_gpu", "utilization_gpu",
-			"utilization_memory", "memory_total", "memory_free", "memory_used", "fan_speed", "power_draw",
-			"clocks_current_graphics", "clocks_current_sm", "clocks_current_memory", "clocks_current_video",
-			"encoder_stats_session_count", "encoder_stats_average_fps", "encoder_stats_average_latency",
 		}
 
 		for _, row := range records {
