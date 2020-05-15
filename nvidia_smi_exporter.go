@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"os/exec"
 	"strconv"
 )
@@ -21,7 +22,7 @@ var (
 
 func metrics(response http.ResponseWriter, request *http.Request) {
 	out, err := exec.Command(
-		"nvidia-smi",
+		envOrDefault("NVIDIA_SMI", "nvidia-smi"),
 		"--query-gpu=name,index,driver_version,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used,fan.speed,power.draw,clocks.current.graphics,clocks.current.sm,clocks.current.memory,clocks.current.video,encoder.stats.sessionCount,encoder.stats.averageFps,encoder.stats.averageLatency",
 		"--format=csv,noheader,nounits").Output()
 
@@ -58,8 +59,15 @@ func metrics(response http.ResponseWriter, request *http.Request) {
 			}
 			fmt.Fprintf(response, "nvidia_%s{gpu=\"%s\"} %f\n", metricList[idx], name, v)
 		}
-		fmt.Fprintf(response, "nvidia_unsupported_metrics_count{gpu=\"%s\"} %f\n", name, unsupported)
+		fmt.Fprintf(response, "nvidia_unsupported_metrics_count{gpu=\"%s\"} %d\n", name, unsupported)
 	}
+}
+
+func envOrDefault(key string, defaultValue string) string {
+	if v, ok := os.LookupEnv(key); ok {
+		return v
+	}
+	return defaultValue
 }
 
 func init() {
