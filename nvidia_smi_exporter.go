@@ -99,12 +99,6 @@ func init() {
 
 func main() {
 	logger := log.NewLogger()
-
-	//    addr := ":9101"
-	//    if len(os.Args) > 1 {
-	//        addr = ":" + os.Args[1]
-	//    }
-
 	http.HandleFunc(metricsPath, metrics(logger))
 	err := http.ListenAndServe(listenAddress, nil)
 	if err != nil {
