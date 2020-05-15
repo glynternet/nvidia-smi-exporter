@@ -16,10 +16,25 @@ import (
 // name, index, temperature.gpu, utilization.gpu,
 // utilization.memory, memory.total, memory.free, memory.used
 
-var (
-	listenAddress string
-	metricsPath   string
-)
+func main() {
+	var (
+		listenAddress string
+		metricsPath   string
+	)
+
+	flag.StringVar(&listenAddress, "web.listen-address", ":9101", "Address to listen on")
+	flag.StringVar(&metricsPath, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
+	flag.Parse()
+
+	logger := log.NewLogger()
+	http.HandleFunc(metricsPath, metrics(logger))
+	err := http.ListenAndServe(listenAddress, nil)
+	if err != nil {
+		_ = logger.Log(
+			log.Message("Error running ListenAndServe"),
+			log.Error(err))
+	}
+}
 
 func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 	command := envOrDefault("NVIDIA_SMI", "nvidia-smi")
@@ -87,21 +102,4 @@ func envOrDefault(key string, defaultValue string) string {
 		return v
 	}
 	return defaultValue
-}
-
-func init() {
-	flag.StringVar(&listenAddress, "web.listen-address", ":9101", "Address to listen on")
-	flag.StringVar(&metricsPath, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
-	flag.Parse()
-}
-
-func main() {
-	logger := log.NewLogger()
-	http.HandleFunc(metricsPath, metrics(logger))
-	err := http.ListenAndServe(listenAddress, nil)
-	if err != nil {
-		_ = logger.Log(
-			log.Message("Error running ListenAndServe"),
-			log.Error(err))
-	}
 }
