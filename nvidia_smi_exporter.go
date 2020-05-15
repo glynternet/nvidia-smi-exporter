@@ -24,6 +24,7 @@ func metrics(response http.ResponseWriter, request *http.Request) {
 	out, err := exec.Command(
 		envOrDefault("NVIDIA_SMI", "nvidia-smi"),
 		"--query-gpu=name,index,driver_version,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used,fan.speed,power.draw,clocks.current.graphics,clocks.current.sm,clocks.current.memory,clocks.current.video,encoder.stats.sessionCount,encoder.stats.averageFps,encoder.stats.averageLatency",
+		// TODO(glynternet): try getting units and adding to description of each metric
 		"--format=csv,noheader,nounits").Output()
 
 	if err != nil {
