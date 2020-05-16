@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/glynternet/nvidia_smi_exporter/pkg/nvidia"
+	"github.com/glynternet/nvidia-smi-exporter/pkg/nvidia"
 	"github.com/glynternet/pkg/log"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"

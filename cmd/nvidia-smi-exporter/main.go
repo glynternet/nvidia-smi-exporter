@@ -14,7 +14,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-const appName = "nvidia_smi_exporter"
+const appName = "nvidia-smi-exporter"
 
 // to be changed using ldflags with the go build command
 var version = "unknown"

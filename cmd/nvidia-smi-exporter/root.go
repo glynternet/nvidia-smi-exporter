@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/glynternet/nvidia_smi_exporter/cmd/nvidia_smi_exporter/cmd"
+	"github.com/glynternet/nvidia-smi-exporter/cmd/nvidia-smi-exporter/cmd"
 	pkgcmd "github.com/glynternet/pkg/cmd"
 	"github.com/glynternet/pkg/log"
 	"github.com/spf13/cobra"

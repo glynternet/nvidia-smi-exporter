@@ -1,4 +1,4 @@
-BINARIES ?= nvidia-smi-exporter
+COMPONENTS ?= nvidia-smi-exporter
 
 include ./dubplate.Makefile
 include ./go.Makefile

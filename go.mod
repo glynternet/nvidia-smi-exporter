@@ -1,4 +1,4 @@
-module github.com/glynternet/nvidia_smi_exporter
+module github.com/glynternet/nvidia-smi-exporter
 
 go 1.14
 
