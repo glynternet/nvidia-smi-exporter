@@ -70,8 +70,9 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		}
 
 		for _, row := range records {
-			var unparseable int
-			var unsupportedQueryField int
+			var unparseables int
+			var queryFieldUnsupporteds int
+			var unknownErrors int
 			name := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
@@ -83,18 +84,22 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 						log.KV{K: "value", V: value},
 						log.KV{K: "correspondingFlag", V: metricList[idx]},
 					)
-					unparseable++
+					unparseables++
 					continue
 				}
 				switch knownErr {
-				case metricUnsupported:
-					unsupportedQueryField++
+				case queryFieldUnsupported:
+					queryFieldUnsupporteds++
+					continue
+				case unknownError:
+					unknownErrors++
 					continue
 				}
 				writeMetric(logger, response, metricList[idx], name, v)
 			}
-			writeMetric(logger, response, "unparseable_query_result_value_count", name, float64(unparseable))
-			writeMetric(logger, response, "unsupported_query_field", name, float64(unsupportedQueryField))
+			writeMetric(logger, response, "unparseable_query_result_value_count", name, float64(unparseables))
+			writeMetric(logger, response, "query_field_unsupported_count", name, float64(queryFieldUnsupporteds))
+			writeMetric(logger, response, "unknown_error_count", name, float64(unknownErrors))
 		}
 	}
 }
@@ -110,7 +115,8 @@ func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, val
 type knownError string
 
 const (
-	metricUnsupported = "metric is unsupported"
+	queryFieldUnsupported = "metric is unsupported"
+	unknownError          = "unknown error"
 )
 
 // returns parsed value, known error, or error
@@ -120,11 +126,13 @@ func parseValue(value string) (float64, knownError, error) {
 	}
 	switch value {
 	case "[Not Supported]":
-		return 0, metricUnsupported, nil
+		return 0, queryFieldUnsupported, nil
 	case "Enabled":
 		return 1, "", nil
 	case "Disabled":
 		return 0, "", nil
+	case "[Unknown Error]":
+		return 0, unknownError, nil
 	}
 	return 0, "", fmt.Errorf("unparsable query result value: %q", value)
 }
