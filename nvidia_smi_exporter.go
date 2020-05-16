@@ -78,7 +78,9 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 						log.Message("Error parsing value for metric"),
 						log.Error(err),
 						log.KV{K: "index", V: idx},
-						log.KV{K: "value", V: value})
+						log.KV{K: "value", V: value},
+						log.KV{K: "correspondingFlag", V: metricList[idx]},
+					)
 					unsupported++
 					continue
 				}
