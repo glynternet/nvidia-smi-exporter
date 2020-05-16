@@ -103,10 +103,10 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 					continue
 				}
 				switch knownErr {
-				case queryFieldUnsupported:
+				case knownErrorQueryFieldUnsupported:
 					problematicMetricValues[metricNameQueryFieldUnsupported] = append(problematicMetricValues[metricNameQueryFieldUnsupported], metricName)
 					continue
-				case unknownError:
+				case knownErrorUnknownError:
 					problematicMetricValues[metricNameUnknownError] = append(problematicMetricValues[metricNameUnknownError], metricName)
 					continue
 				}
@@ -156,29 +156,32 @@ func writeMetricCountWithLoggedValues(logger log.Logger, w io.Writer, metricName
 	}
 }
 
-type knownError string
+type knownError int
 
 const (
-	queryFieldUnsupported = "metric is unsupported"
-	unknownError          = "unknown error"
+	// when a knownError is required but there is actually no error :)
+	knownErrorNone knownError = iota
+	knownErrorQueryFieldUnsupported
+	// seems strange but it's a known case where nvidia-smi returns "Unknown Error"
+	knownErrorUnknownError
 )
 
 // returns parsed value, known error, or error
 func parseValue(value string) (float64, knownError, error) {
 	if v, err := strconv.ParseFloat(value, 64); err == nil {
-		return v, "", nil
+		return v, knownErrorNone, nil
 	}
 	switch value {
 	case "[Not Supported]":
-		return 0, queryFieldUnsupported, nil
+		return 0, knownErrorQueryFieldUnsupported, nil
 	case "Enabled":
-		return 1, "", nil
+		return 1, knownErrorNone, nil
 	case "Disabled":
-		return 0, "", nil
+		return 0, knownErrorNone, nil
 	case "[Unknown Error]":
-		return 0, unknownError, nil
+		return 0, knownErrorUnknownError, nil
 	}
-	return 0, "", fmt.Errorf("unparsable query result value: %q", value)
+	return 0, knownErrorNone, fmt.Errorf("unparsable query result value: %q", value)
 }
 
 func defaultFields() []string {
