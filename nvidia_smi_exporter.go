@@ -73,16 +73,34 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 			var unparseables int
 			var queryFieldUnsupporteds int
 			var unknownErrors int
+			var pstateUnparesable int
 			name := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
+				metricName := metricList[idx]
+				if metricName == "pstate" {
+					v, err := parsePstate(value)
+					if err != nil {
+						_ = logger.Log(
+							log.Message("Error parsing pstate level"),
+							log.Error(err),
+							log.KV{K: "index", V: idx},
+							log.KV{K: "value", V: value},
+							log.KV{K: "correspondingFlag", V: metricName},
+						)
+						pstateUnparesable++
+						continue
+					}
+					writeMetric(logger, response, metricName, name, v)
+					continue
+				}
 				if err != nil {
 					_ = logger.Log(
 						log.Message("Error parsing value for metric"),
 						log.Error(err),
 						log.KV{K: "index", V: idx},
 						log.KV{K: "value", V: value},
-						log.KV{K: "correspondingFlag", V: metricList[idx]},
+						log.KV{K: "correspondingFlag", V: metricName},
 					)
 					unparseables++
 					continue
@@ -95,13 +113,31 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 					unknownErrors++
 					continue
 				}
-				writeMetric(logger, response, metricList[idx], name, v)
+				writeMetric(logger, response, metricName, name, v)
 			}
 			writeMetric(logger, response, "unparseable_query_result_value_count", name, float64(unparseables))
 			writeMetric(logger, response, "query_field_unsupported_count", name, float64(queryFieldUnsupporteds))
 			writeMetric(logger, response, "unknown_error_count", name, float64(unknownErrors))
+			writeMetric(logger, response, "pstate_unparseable", name, float64(pstateUnparesable))
 		}
 	}
+}
+
+func parsePstate(value string) (float64, error) {
+	lenValue := len(value)
+	if lenValue < 2 {
+		return 0, fmt.Errorf("pstate value should be longer than 2 characters but is %d", lenValue)
+	}
+	firstChar := value[0]
+	if firstChar != 'P' {
+		return 0, fmt.Errorf("expected first character P but received: %c", firstChar)
+	}
+	level := value[1:]
+	v, err := strconv.ParseInt(level, 10, 64)
+	if err != nil {
+		return 0, fmt.Errorf("pstate level unparseable: %q", level)
+	}
+	return float64(v), nil
 }
 
 func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, value float64) {
