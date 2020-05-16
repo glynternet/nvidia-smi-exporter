@@ -15,6 +15,7 @@ func buildCmdTree(logger log.Logger, out io.Writer, rootCmd *cobra.Command) {
 	rootCmd.AddCommand(pkgcmd.NewBashCompletion(rootCmd, out))
 	for _, addCmd := range []func(log.Logger, io.Writer, *cobra.Command) error{
 		cmd.Serve,
+		cmd.ListMetrics,
 	} {
 		err := addCmd(logger, out, rootCmd)
 		if err != nil {

@@ -20,11 +20,15 @@ const (
 	metricNamePstateUnparseable      = "pstate_unparseable"
 )
 
-func MetricsHandler(logger log.Logger, executable string, fields []string) http.Handler {
-	metricList := make([]string, len(fields))
+func MetricNames(fields []string) []string {
+	ns := make([]string, len(fields))
 	for i, field := range fields {
-		metricList[i] = strings.Replace(field, ".", "_", -1)
+		ns[i] = strings.Replace(field, ".", "_", -1)
 	}
+	return ns
+}
+
+func MetricsHandler(logger log.Logger, executable string, fields []string) http.Handler {
 	args := []string{"--query-gpu=name,index," + strings.Join(fields, ","),
 		// TODO(glynternet): try getting units and add to description of each metric
 		"--format=csv,noheader,nounits"}
@@ -49,12 +53,13 @@ func MetricsHandler(logger log.Logger, executable string, fields []string) http.
 			return
 		}
 
+		metrics := MetricNames(fields)
 		for _, row := range records {
 			problematicMetricValues := make(map[string][]string)
 			gpuName := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
-				metricName := metricList[idx]
+				metricName := metrics[idx]
 				if metricName == "pstate" {
 					v, err := parsePstate(value)
 					if err != nil {
