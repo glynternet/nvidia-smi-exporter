@@ -1,3 +1,5 @@
-nvidia_smi_exporter
-sample.csv
 .idea
+.DS_Store
+build
+*.pb.go
+!vendor/**
