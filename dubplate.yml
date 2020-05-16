@@ -1,0 +1,3 @@
+repo: github.com/glynternet/nvidia_smi_exporter
+apps:
+  - nvidia_smi_exporter
