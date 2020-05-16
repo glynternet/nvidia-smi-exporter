@@ -147,6 +147,7 @@ func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, val
 func writeMetricCountWithLoggedValues(logger log.Logger, w io.Writer, metricName, gpuName string, values []string) {
 	writeMetric(logger, w, metricName, gpuName, float64(len(values)))
 	if len(values) > 0 {
+		// TODO(glynternet): make this only in debug logging
 		_ = logger.Log(
 			log.Message("non-standard metric values"),
 			log.KV{K: "metricName", V: metricName},
