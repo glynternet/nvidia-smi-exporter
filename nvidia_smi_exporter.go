@@ -46,7 +46,7 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		metricList[i] = strings.Replace(field, ".", "_", -1)
 	}
 	args := []string{"--query-gpu=name,index," + strings.Join(fields, ","),
-		// TODO(glynternet): try getting units and adding to description of each metric
+		// TODO(glynternet): try getting units and add to description of each metric
 		"--format=csv,noheader,nounits"}
 	return func(response http.ResponseWriter, request *http.Request) {
 		out, err := exec.Command(command, args...).Output()
@@ -70,9 +70,9 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		}
 
 		for _, row := range records {
-			var unparseables int
-			var queryFieldUnsupporteds int
-			var unknownErrors int
+			var unparseables []string
+			var queryFieldUnsupporteds []string
+			var unknownErrorMetrics []string
 			var pstateUnparesable int
 			name := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
@@ -102,22 +102,22 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 						log.KV{K: "value", V: value},
 						log.KV{K: "correspondingFlag", V: metricName},
 					)
-					unparseables++
+					unparseables = append(unparseables, metricName)
 					continue
 				}
 				switch knownErr {
 				case queryFieldUnsupported:
-					queryFieldUnsupporteds++
+					queryFieldUnsupporteds = append(queryFieldUnsupporteds, metricName)
 					continue
 				case unknownError:
-					unknownErrors++
+					unknownErrorMetrics = append(unknownErrorMetrics, metricName)
 					continue
 				}
 				writeMetric(logger, response, metricName, name, v)
 			}
-			writeMetric(logger, response, "unparseable_query_result_value_count", name, float64(unparseables))
-			writeMetric(logger, response, "query_field_unsupported_count", name, float64(queryFieldUnsupporteds))
-			writeMetric(logger, response, "unknown_error_count", name, float64(unknownErrors))
+			writeMetricCountWithLoggedValues(logger, response, "unparseable_query_result_value_count", name, unparseables)
+			writeMetricCountWithLoggedValues(logger, response, "query_field_unsupported_count", name, queryFieldUnsupporteds)
+			writeMetricCountWithLoggedValues(logger, response, "unknown_error_count", name, unknownErrorMetrics)
 			writeMetric(logger, response, "pstate_unparseable", name, float64(pstateUnparesable))
 		}
 	}
@@ -146,6 +146,16 @@ func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, val
 			log.Message("Error writing response"),
 			log.Error(err))
 	}
+}
+
+func writeMetricCountWithLoggedValues(logger log.Logger, w io.Writer, metricName, gpuName string, values []string) {
+	writeMetric(logger, w, metricName, gpuName, float64(len(values)))
+	_ = logger.Log(
+		log.Message("non-standard metric values"),
+		log.KV{K: "metricName", V: metricName},
+		log.KV{K: "gpuName", V: gpuName},
+		log.KV{K: "values", V: values},
+	)
 }
 
 type knownError string
