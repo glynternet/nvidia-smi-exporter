@@ -5,6 +5,7 @@ import (
 	"encoding/csv"
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/exec"
@@ -69,10 +70,11 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		}
 
 		for _, row := range records {
-			var unsupported int
+			var unparseable int
+			var unsupportedQueryField int
 			name := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
-				v, err := strconv.ParseFloat(value, 64)
+				v, knownErr, err := parseValue(value)
 				if err != nil {
 					_ = logger.Log(
 						log.Message("Error parsing value for metric"),
@@ -81,22 +83,50 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 						log.KV{K: "value", V: value},
 						log.KV{K: "correspondingFlag", V: metricList[idx]},
 					)
-					unsupported++
+					unparseable++
 					continue
 				}
-				if _, err := fmt.Fprintf(response, "nvidia_%s{gpu=\"%s\"} %f\n", metricList[idx], name, v); err != nil {
-					_ = logger.Log(
-						log.Message("Error writing response"),
-						log.Error(err))
+				switch knownErr {
+				case metricUnsupported:
+					unsupportedQueryField++
+					continue
 				}
+				writeMetric(logger, response, metricList[idx], name, v)
 			}
-			if _, err := fmt.Fprintf(response, "nvidia_unsupported_metrics_count{gpu=\"%s\"} %d\n", name, unsupported); err != nil {
-				_ = logger.Log(
-					log.Message("Error writing response"),
-					log.Error(err))
-			}
+			writeMetric(logger, response, "unparseable_query_result_value_count", name, float64(unparseable))
+			writeMetric(logger, response, "unsupported_query_field", name, float64(unsupportedQueryField))
 		}
 	}
+}
+
+func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, value float64) {
+	if _, err := fmt.Fprintf(w, "nvidia_%s{gpu=\"%s\"} %f\n", metricName, gpuName, value); err != nil {
+		_ = logger.Log(
+			log.Message("Error writing response"),
+			log.Error(err))
+	}
+}
+
+type knownError string
+
+const (
+	metricUnsupported = "metric is unsupported"
+)
+
+// returns parsed value, known error, or error
+func parseValue(value string) (float64, knownError, error) {
+	if v, err := strconv.ParseFloat(value, 64); err == nil {
+		return v, "", nil
+	}
+	switch value {
+	case "[Not Supported]":
+		return 0, metricUnsupported, nil
+	case "Enabled":
+		return 1, "", nil
+	case "Disabled":
+		return 0, "", nil
+	}
+	return 0, "", fmt.Errorf("unparsable query result value: %q", value)
 }
 
 func defaultFields() []string {
