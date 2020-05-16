@@ -18,6 +18,13 @@ import (
 // name, index, temperature.gpu, utilization.gpu,
 // utilization.memory, memory.total, memory.free, memory.used
 
+const (
+	metricNameUnparseableQueryResult = "unparseable_query_result_value"
+	metricNameQueryFieldUnsupported  = "query_field_unsupported"
+	metricNameUnknownError           = "unknown_error"
+	metricNamePstateUnparseable      = "pstate_unparseable"
+)
+
 func main() {
 	var (
 		listenAddress string
@@ -70,28 +77,18 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 		}
 
 		for _, row := range records {
-			var unparseables []string
-			var queryFieldUnsupporteds []string
-			var unknownErrorMetrics []string
-			var pstateUnparesable int
-			name := fmt.Sprintf("%s[%s]", row[0], row[1])
+			problematicMetricValues := make(map[string][]string)
+			gpuName := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
 				metricName := metricList[idx]
 				if metricName == "pstate" {
 					v, err := parsePstate(value)
 					if err != nil {
-						_ = logger.Log(
-							log.Message("Error parsing pstate level"),
-							log.Error(err),
-							log.KV{K: "index", V: idx},
-							log.KV{K: "value", V: value},
-							log.KV{K: "correspondingFlag", V: metricName},
-						)
-						pstateUnparesable++
+						problematicMetricValues[metricNamePstateUnparseable] = append(problematicMetricValues[metricNamePstateUnparseable], metricName)
 						continue
 					}
-					writeMetric(logger, response, metricName, name, v)
+					writeMetric(logger, response, metricName, gpuName, v)
 					continue
 				}
 				if err != nil {
@@ -102,23 +99,22 @@ func metrics(logger log.Logger) func(http.ResponseWriter, *http.Request) {
 						log.KV{K: "value", V: value},
 						log.KV{K: "correspondingFlag", V: metricName},
 					)
-					unparseables = append(unparseables, metricName)
+					problematicMetricValues[metricNameUnparseableQueryResult] = append(problematicMetricValues[metricNameUnparseableQueryResult], metricName)
 					continue
 				}
 				switch knownErr {
 				case queryFieldUnsupported:
-					queryFieldUnsupporteds = append(queryFieldUnsupporteds, metricName)
+					problematicMetricValues[metricNameQueryFieldUnsupported] = append(problematicMetricValues[metricNameQueryFieldUnsupported], metricName)
 					continue
 				case unknownError:
-					unknownErrorMetrics = append(unknownErrorMetrics, metricName)
+					problematicMetricValues[metricNameUnknownError] = append(problematicMetricValues[metricNameUnknownError], metricName)
 					continue
 				}
-				writeMetric(logger, response, metricName, name, v)
+				writeMetric(logger, response, metricName, gpuName, v)
 			}
-			writeMetricCountWithLoggedValues(logger, response, "unparseable_query_result_value_count", name, unparseables)
-			writeMetricCountWithLoggedValues(logger, response, "query_field_unsupported_count", name, queryFieldUnsupporteds)
-			writeMetricCountWithLoggedValues(logger, response, "unknown_error_count", name, unknownErrorMetrics)
-			writeMetric(logger, response, "pstate_unparseable", name, float64(pstateUnparesable))
+			for metricName, values := range problematicMetricValues {
+				writeMetricCountWithLoggedValues(logger, response, metricName, gpuName, values)
+			}
 		}
 	}
 }
@@ -150,12 +146,14 @@ func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, val
 
 func writeMetricCountWithLoggedValues(logger log.Logger, w io.Writer, metricName, gpuName string, values []string) {
 	writeMetric(logger, w, metricName, gpuName, float64(len(values)))
-	_ = logger.Log(
-		log.Message("non-standard metric values"),
-		log.KV{K: "metricName", V: metricName},
-		log.KV{K: "gpuName", V: gpuName},
-		log.KV{K: "values", V: values},
-	)
+	if len(values) > 0 {
+		_ = logger.Log(
+			log.Message("non-standard metric values"),
+			log.KV{K: "metricName", V: metricName},
+			log.KV{K: "gpuName", V: gpuName},
+			log.KV{K: "values", V: values},
+		)
+	}
 }
 
 type knownError string
