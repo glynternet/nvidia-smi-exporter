@@ -62,7 +62,7 @@ dashboard.new(
   schemaVersion=18,
   editable=false,
   time_from='now-30m',
-  refresh='15s',
+  refresh='30s',
   graphTooltip='shared_crosshair',
   uid='gpu',
 )
@@ -71,9 +71,13 @@ dashboard.new(
     graphPanel.new(
       title=metric,
       datasource='Prometheus',
-      linewidth=2,
+      linewidth=1,
     ).addTarget(
-      prometheus.target(metric)
+      prometheus.target(
+        metric,
+        intervalFactor=1,  // resolution factor where 2 => 1/2
+        interval='1s',  // minStep
+      )
     ) { gridPos: {
       h: panelSize.height,
       w: panelSize.width,
