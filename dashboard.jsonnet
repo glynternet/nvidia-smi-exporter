@@ -92,6 +92,19 @@ local panelSize = {
   width: 8,
 };
 
+local panels = std.mapWithIndex(function(i, metric)
+  graphPanel.new(
+    title=metric,
+    datasource='Prometheus',
+    linewidth=1,
+  ).addTarget(
+    prometheus.target(
+      metric,
+      intervalFactor=1,  // resolution factor where 2 => 1/2
+      interval='1s',  // minStep
+    )
+  ), metrics);
+
 dashboard.new(
   'NVIDIA GPU',
   tags=['nvidia'],
@@ -104,21 +117,11 @@ dashboard.new(
   uid='gpu',
 )
 .addPanels(
-  std.mapWithIndex(function(i, metric)
-    graphPanel.new(
-      title=metric,
-      datasource='Prometheus',
-      linewidth=1,
-    ).addTarget(
-      prometheus.target(
-        metric,
-        intervalFactor=1,  // resolution factor where 2 => 1/2
-        interval='1s',  // minStep
-      )
-    ) { gridPos: {
+  std.mapWithIndex(function(i, panel)
+    panel { gridPos: {
       h: panelSize.height,
       w: panelSize.width,
       x: i * panelSize.width % dashboardWitdh,
       y: panelSize.height * std.floor(i * panelSize.width / dashboardWitdh),
-    } }, metrics)
+    } }, panels)
 )
