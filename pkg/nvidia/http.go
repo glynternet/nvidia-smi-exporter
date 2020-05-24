@@ -7,29 +7,52 @@ import (
 	"io"
 	"net/http"
 	"os/exec"
+	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/glynternet/pkg/log"
 )
 
-const (
-	metricNameUnparseableQueryResult = "unparseable_query_result_value"
-	metricNameQueryFieldUnsupported  = "query_field_unsupported"
-	metricNameUnknownError           = "unknown_error"
-	metricNamePstateUnparseable      = "pstate_unparseable"
+var (
+	// extra metrics for context around parsing of nvidia-smi output
+	metricNameUnparseableQueryResult = metricName("unparseable_query_result_value")
+	metricNameQueryFieldUnsupported  = metricName("query_field_unsupported")
+	metricNameUnknownError           = metricName("unknown_error")
+	metricNamePstateUnparseable      = metricName("pstate_unparseable")
+
+	// special parsing case
+	metricNamePstate = metricName("pstate")
 )
 
-func MetricNames(fields []string) []string {
+// MetricNames provides all of the metrics that can be produced by the exporter.
+func MetricNames(smiFields []string) []string {
+	mns := append(
+		smiMetricNames(smiFields),
+		metricNamePstateUnparseable,
+		metricNameQueryFieldUnsupported,
+		metricNameUnknownError,
+		metricNameUnparseableQueryResult,
+	)
+	sort.Strings(mns)
+	return mns
+}
+
+// smiMetricNames provides the names of the metrics specifically for the SMI query fields used
+func smiMetricNames(fields []string) []string {
 	ns := make([]string, len(fields))
 	for i, field := range fields {
-		ns[i] = strings.Replace(field, ".", "_", -1)
+		ns[i] = metricName(strings.Replace(field, ".", "_", -1))
 	}
 	return ns
 }
 
-func MetricsHandler(logger log.Logger, executable string, fields []string) http.Handler {
-	args := []string{"--query-gpu=name,index," + strings.Join(fields, ","),
+func metricName(suffix string) string {
+	return `nvidia_` + suffix
+}
+
+func MetricsHandler(logger log.Logger, executable string, smiQueryFields []string) http.Handler {
+	args := []string{"--query-gpu=name,index," + strings.Join(smiQueryFields, ","),
 		// TODO(glynternet): try getting units and add to description of each metric
 		"--format=csv,noheader,nounits"}
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
@@ -53,14 +76,14 @@ func MetricsHandler(logger log.Logger, executable string, fields []string) http.
 			return
 		}
 
-		metrics := MetricNames(fields)
+		metrics := smiMetricNames(smiQueryFields)
 		for _, row := range records {
 			problematicMetricValues := make(map[string][]string)
 			gpuName := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
 				metricName := metrics[idx]
-				if metricName == "pstate" {
+				if metricName == metricNamePstate {
 					v, err := parsePstate(value)
 					if err != nil {
 						problematicMetricValues[metricNamePstateUnparseable] = append(problematicMetricValues[metricNamePstateUnparseable], metricName)
@@ -115,7 +138,7 @@ func parsePstate(value string) (float64, error) {
 }
 
 func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, value float64) {
-	if _, err := fmt.Fprintf(w, "nvidia_%s{gpu=\"%s\"} %f\n", metricName, gpuName, value); err != nil {
+	if _, err := fmt.Fprintf(w, "%s{gpu=\"%s\"} %f\n", metricName, gpuName, value); err != nil {
 		_ = logger.Log(
 			log.Message("Error writing response"),
 			log.Error(err))
