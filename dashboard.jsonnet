@@ -67,16 +67,17 @@ dashboard.new(
   uid='gpu',
 )
 .addPanels(
-  [graphPanel.new(
-    title=metrics[metricIndex],
-    datasource='Prometheus',
-    linewidth=2,
-  ).addTarget(
-    prometheus.target(metrics[metricIndex])
-  ) { gridPos: {
-    h: panelSize.height,
-    w: panelSize.width,
-    x: metricIndex * panelSize.width % dashboardWitdh,
-    y: panelSize.height * std.floor(metricIndex * panelSize.width / dashboardWitdh),
-  } } for metricIndex in std.range(0, std.length(metrics) - 1)]
+  std.mapWithIndex(function(i, metric)
+    graphPanel.new(
+      title=metric,
+      datasource='Prometheus',
+      linewidth=2,
+    ).addTarget(
+      prometheus.target(metric)
+    ) { gridPos: {
+      h: panelSize.height,
+      w: panelSize.width,
+      x: i * panelSize.width % dashboardWitdh,
+      y: panelSize.height * std.floor(i * panelSize.width / dashboardWitdh),
+    } }, metrics)
 )
