@@ -96,7 +96,7 @@ local panelSize = {
 local notePanel = text.new(
   span=5,
   mode='markdown',
-  content='## nvidia-smi-exporter\nSome panels within this dashboard may not be populated if the GPU being scraped do not support those metrics.',
+  content='## nvidia-smi-exporter\nSome panels within this dashboard may not be populated if the GPU being scraped do not support those metrics.\n\nSee [Dashboard section](https://github.com/glynternet/nvidia-smi-exporter#dashboard) of the repo README for how to remove unsupported metric panels.',
   transparent=false
 );
 

@@ -26,7 +26,7 @@ Default port is 9101
 6. Restart and check that metrics are scrapable.
 
 ### Metrics Reported per GPU
-See Dashboard section to find out about removing unsupported metrics from your dashboard.
+See [Dashboard section](#dashboard) to find out about removing unsupported metrics from your dashboard.
 
 ```
 nvidia_clocks_applications_gr
