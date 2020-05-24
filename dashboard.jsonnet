@@ -4,6 +4,7 @@ local template = grafana.template;
 local singlestat = grafana.singlestat;
 local graphPanel = grafana.graphPanel;
 local prometheus = grafana.prometheus;
+local text = grafana.text;
 
 local metrics = [
   'nvidia_clocks_applications_gr',
@@ -92,7 +93,14 @@ local panelSize = {
   width: 8,
 };
 
-local panels = std.mapWithIndex(function(i, metric)
+local notePanel = text.new(
+  span=5,
+  mode='markdown',
+  content='## nvidia-smi-exporter\nSome panels within this dashboard may not be populated if the GPU being scraped do not support those metrics.',
+  transparent=false
+);
+
+local graphPanels = std.mapWithIndex(function(i, metric)
   graphPanel.new(
     title=metric,
     datasource='Prometheus',
@@ -123,5 +131,5 @@ dashboard.new(
       w: panelSize.width,
       x: i * panelSize.width % dashboardWitdh,
       y: panelSize.height * std.floor(i * panelSize.width / dashboardWitdh),
-    } }, panels)
+    } }, [notePanel] + graphPanels)
 )
