@@ -55,6 +55,7 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 	args := []string{"--query-gpu=name,index," + strings.Join(smiQueryFields, ","),
 		// TODO(glynternet): try getting units and add to description of each metric
 		"--format=csv,noheader,nounits"}
+	metrics := smiMetricNames(smiQueryFields)
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		out, err := exec.Command(executable, args...).Output()
 		if err != nil {
@@ -76,7 +77,6 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 			return
 		}
 
-		metrics := smiMetricNames(smiQueryFields)
 		for _, row := range records {
 			problematicMetricValues := make(map[string][]string)
 			gpuName := fmt.Sprintf("%s[%s]", row[0], row[1])
