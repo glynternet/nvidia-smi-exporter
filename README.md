@@ -2,79 +2,115 @@
 
 nvidia-smi metrics exporter for Prometheus
 
-## Build Image
+## Build
 ```
-> docker build -t="nvidia-smi-exporter:0" .
+# Set OS to change operating system, default linux
+# Set ARCH to change architecture, default amd64
+make nvidia-smi-exporter-binary
+# builds to -o build/VERSION/OS-ARCH/nvidia-smi-exporter
 ```
 
-## Docker Run
+## Run
 ```
-> nvidia-docker run -d --net="host" nvidia-smi-exporter:0 --restart=always
+# Ensure nvidia-smi is in your PATH or exporter NVIDIA_SMI with path to the binary
+nvidia-smi-exporter serve
 ```
 Default port is 9101
 
-### curl localhost:9101/metrics
-```
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[0]"} 34
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[0]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[0]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[0]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[0]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[0]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[1]"} 37
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[1]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[1]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[1]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[1]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[1]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[2]"} 36
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[2]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[2]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[2]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[2]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[2]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[3]"} 33
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[3]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[3]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[3]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[3]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[3]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[4]"} 36
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[4]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[4]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[4]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[4]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[4]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[5]"} 37
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[5]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[5]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[5]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[5]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[5]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[6]"} 39
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[6]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[6]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[6]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[6]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[6]"} 10
-temperature_gpu{gpu="Tesla V100-SXM2-16GB[7]"} 38
-utilization_gpu{gpu="Tesla V100-SXM2-16GB[7]"} 0
-utilization_memory{gpu="Tesla V100-SXM2-16GB[7]"} 0
-memory_total{gpu="Tesla V100-SXM2-16GB[7]"} 16152
-memory_free{gpu="Tesla V100-SXM2-16GB[7]"} 16142
-memory_used{gpu="Tesla V100-SXM2-16GB[7]"} 10
-```
+## Launch at startup on Windows
+1. Build exporter for Windows
+2. Move exporter to `C:\\Windows\System32`
+3. Create batch file in `C:\\Windows\System32` containing `nvidia-exporter.exe serve`
+4. Hit `WINDOWS_KEY + R` then run `shell:common startup`. This should open windows explorer.
+5. Drag the batch file into that explorer window. This should create a shortcut, not move the original.
+6. Restart and check that metrics are scrapable.
 
-### Exact command
+### Metrics Reported per GPU
 ```
-nvidia-smi --query-gpu=name,index,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv,noheader,nounits
+nvidia_clocks_applications_gr
+nvidia_clocks_applications_graphics
+nvidia_clocks_applications_mem
+nvidia_clocks_applications_memory
+nvidia_clocks_current_graphics
+nvidia_clocks_current_memory
+nvidia_clocks_current_sm
+nvidia_clocks_current_video
+nvidia_clocks_default_applications_gr
+nvidia_clocks_default_applications_graphics
+nvidia_clocks_default_applications_mem
+nvidia_clocks_default_applications_memory
+nvidia_clocks_gr
+nvidia_clocks_max_gr
+nvidia_clocks_max_graphics
+nvidia_clocks_max_mem
+nvidia_clocks_max_memory
+nvidia_clocks_max_sm
+nvidia_clocks_mem
+nvidia_clocks_sm
+nvidia_clocks_throttle_reasons_gpu_idle
+nvidia_clocks_throttle_reasons_hw_power_brake_slowdown
+nvidia_clocks_throttle_reasons_hw_slowdown
+nvidia_clocks_throttle_reasons_hw_thermal_slowdown
+nvidia_clocks_throttle_reasons_sw_thermal_slowdown
+nvidia_clocks_throttle_reasons_sync_boost
+nvidia_clocks_video
+nvidia_driver_version
+nvidia_ecc_errors_corrected_aggregate_device_memory
+nvidia_ecc_errors_corrected_aggregate_l1_cache
+nvidia_ecc_errors_corrected_aggregate_l2_cache
+nvidia_ecc_errors_corrected_aggregate_register_file
+nvidia_ecc_errors_corrected_aggregate_texture_memory
+nvidia_ecc_errors_corrected_aggregate_total
+nvidia_ecc_errors_corrected_volatile_l1_cache
+nvidia_ecc_errors_corrected_volatile_l2_cache
+nvidia_ecc_errors_corrected_volatile_register_file
+nvidia_ecc_errors_corrected_volatile_texture_memory
+nvidia_ecc_errors_corrected_volatile_total
+nvidia_ecc_errors_uncorrected_aggregate_device_memory
+nvidia_ecc_errors_uncorrected_aggregate_l1_cache
+nvidia_ecc_errors_uncorrected_aggregate_l2_cache
+nvidia_ecc_errors_uncorrected_aggregate_register_file
+nvidia_ecc_errors_uncorrected_aggregate_texture_memory
+nvidia_ecc_errors_uncorrected_aggregate_total
+nvidia_ecc_errors_uncorrected_volatile_device_memory
+nvidia_ecc_errors_uncorrected_volatile_l1_cache
+nvidia_ecc_errors_uncorrected_volatile_l2_cache
+nvidia_ecc_errors_uncorrected_volatile_register_file
+nvidia_ecc_errors_uncorrected_volatile_texture_memory
+nvidia_ecc_errors_uncorrected_volatile_total
+nvidia_encoder_stats_averageFps
+nvidia_encoder_stats_averageLatency
+nvidia_encoder_stats_sessionCount
+nvidia_enforced_power_limit
+nvidia_fan_speed
+nvidia_memory_free
+nvidia_memory_total
+nvidia_memory_used
+nvidia_power_default_limit
+nvidia_power_draw
+nvidia_power_limit
+nvidia_power_management
+nvidia_power_max_limit
+nvidia_power_min_limit
+nvidia_pstate
+nvidia_pstate_unparseable
+nvidia_query_field_unsupported
+nvidia_retired_pages_dbe
+nvidia_retired_pages_double_bit_count
+nvidia_retired_pages_pending
+nvidia_retired_pages_sbe
+nvidia_retired_pages_single_bit_ecc_count
+nvidia_temperature_gpu
+nvidia_unknown_error
+nvidia_unparseable_query_result_value
+nvidia_utilization_gpu
+nvidia_utilization_memory
 ```
 
 ### Prometheus example config
 
-```
-- job_name: "gpu_exporter"
+```yaml
+- job_name: "nvidia_gpu"
   static_configs:
-  - targets: ['localhost:9101']
+  - targets: ['HOST:9101'] # default port is 9101
 ```
-
