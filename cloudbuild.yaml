@@ -1,4 +1,0 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '--tag=gcr.io/$PROJECT_ID/nvidia-smi-exporter', '.']
-images: ['gcr.io/$PROJECT_ID/nvidia-smi-exporter']
