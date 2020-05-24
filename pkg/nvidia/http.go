@@ -78,7 +78,7 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 		}
 
 		for _, row := range records {
-			problematicMetricValues := make(map[string][]string)
+			problematicMetricValues := problematicMetricStore()
 			gpuName := fmt.Sprintf("%s[%s]", row[0], row[1])
 			for idx, value := range row[2:] {
 				v, knownErr, err := parseValue(value)
@@ -118,6 +118,16 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 			}
 		}
 	})
+}
+
+// zero length slice for each metric so that we produce a metric even when there are no errors
+func problematicMetricStore() map[string][]string {
+	return map[string][]string{
+		metricNameUnparseableQueryResult: nil,
+		metricNameQueryFieldUnsupported:  nil,
+		metricNameUnknownError:           nil,
+		metricNamePstateUnparseable:      nil,
+	}
 }
 
 func parsePstate(value string) (float64, error) {
