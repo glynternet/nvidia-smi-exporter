@@ -95,6 +95,7 @@ local panelSize = {
 dashboard.new(
   'NVIDIA GPU',
   tags=['nvidia'],
+  description='Dashboard for the nvidia-smi-exporter. Some panels may not contain data for unsupported nvidia-smi query fields.',
   schemaVersion=18,
   editable=false,
   time_from='now-30m',
