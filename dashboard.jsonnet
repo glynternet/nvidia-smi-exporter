@@ -106,6 +106,7 @@ local graphPanels = std.mapWithIndex(function(i, metric)
     title=metric,
     datasource='Prometheus',
     linewidth=1,
+    legend_show=false,
   ).addTarget(
     prometheus.target(
       metric,

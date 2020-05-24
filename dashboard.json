@@ -49,7 +49,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -134,7 +134,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -219,7 +219,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -304,7 +304,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -389,7 +389,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -474,7 +474,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -559,7 +559,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -644,7 +644,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -729,7 +729,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -814,7 +814,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -899,7 +899,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -984,7 +984,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1069,7 +1069,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1154,7 +1154,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1239,7 +1239,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1324,7 +1324,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1409,7 +1409,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1494,7 +1494,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1579,7 +1579,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1664,7 +1664,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1749,7 +1749,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1834,7 +1834,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -1919,7 +1919,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2004,7 +2004,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2089,7 +2089,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2174,7 +2174,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2259,7 +2259,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2344,7 +2344,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2429,7 +2429,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2514,7 +2514,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2599,7 +2599,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2684,7 +2684,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2769,7 +2769,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2854,7 +2854,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -2939,7 +2939,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3024,7 +3024,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3109,7 +3109,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3194,7 +3194,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3279,7 +3279,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3364,7 +3364,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3449,7 +3449,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3534,7 +3534,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3619,7 +3619,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3704,7 +3704,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3789,7 +3789,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3874,7 +3874,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -3959,7 +3959,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4044,7 +4044,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4129,7 +4129,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4214,7 +4214,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4299,7 +4299,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4384,7 +4384,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4469,7 +4469,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4554,7 +4554,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4639,7 +4639,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4724,7 +4724,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4809,7 +4809,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4894,7 +4894,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -4979,7 +4979,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5064,7 +5064,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5149,7 +5149,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5234,7 +5234,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5319,7 +5319,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5404,7 +5404,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5489,7 +5489,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5574,7 +5574,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5659,7 +5659,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5744,7 +5744,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5829,7 +5829,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5914,7 +5914,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -5999,7 +5999,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6084,7 +6084,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6169,7 +6169,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6254,7 +6254,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6339,7 +6339,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6424,7 +6424,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6509,7 +6509,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
@@ -6594,7 +6594,7 @@
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": false,
             "sideWidth": null,
             "total": false,
             "values": false
