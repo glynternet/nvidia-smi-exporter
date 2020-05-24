@@ -1,6 +1,6 @@
 # nvidia-smi-exporter
 
-nvidia-smi metrics exporter for Prometheus
+Cross-platform nvidia-smi metrics prometheus exporter and grafana dashboard
 
 ## Build
 ```
@@ -26,6 +26,8 @@ Default port is 9101
 6. Restart and check that metrics are scrapable.
 
 ### Metrics Reported per GPU
+See [Dashboard section](#dashboard) to find out about removing unsupported metrics from your dashboard.
+
 ```
 nvidia_clocks_applications_gr
 nvidia_clocks_applications_graphics
@@ -105,6 +107,14 @@ nvidia_unknown_error
 nvidia_unparseable_query_result_value
 nvidia_utilization_gpu
 nvidia_utilization_memory
+```
+
+### Dashboard
+The dashboard is generated using jsonnet and the grafana/grafonnet-lib library.
+If your GPU does not support all of the metrics, you may want to edit the `dashboard.jsonnet` file to remove and/or reorder some of the metric names. Then generate the dashboard using the following command:
+
+```shell
+jsonnet -J ../../grafana/grafonnet-lib ./dashboard.jsonnet > ./dashboard.json
 ```
 
 ### Prometheus example config
