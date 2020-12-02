@@ -20,7 +20,7 @@ Default port is 9101
 ## Launch at startup on Windows
 1. Build exporter for Windows
 2. Move exporter to `C:\\Windows\System32`
-3. Create batch file in `C:\\Windows\System32` containing `nvidia-exporter.exe serve`
+3. Create batch file in `C:\\Windows\System32` containing `nvidia-smi-exporter.exe serve`
 4. Hit `WINDOWS_KEY + R` then run `shell:common startup`. This should open windows explorer.
 5. Drag the batch file into that explorer window. This should create a shortcut, not move the original.
 6. Restart and check that metrics are scrapable.
