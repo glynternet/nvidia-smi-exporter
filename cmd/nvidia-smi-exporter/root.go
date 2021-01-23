@@ -21,7 +21,7 @@ func buildCmdTree(logger log.Logger, out io.Writer, rootCmd *cobra.Command) {
 		if err != nil {
 			_ = logger.Log(
 				log.Message("Error adding subcommand"),
-				log.Error(err))
+				log.ErrorMessage(err))
 			os.Exit(1)
 		}
 	}
@@ -29,7 +29,7 @@ func buildCmdTree(logger log.Logger, out io.Writer, rootCmd *cobra.Command) {
 	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
 		_ = logger.Log(
 			log.Message("Error binding PFlags"),
-			log.Error(err))
+			log.ErrorMessage(err))
 		os.Exit(1)
 	}
 }
