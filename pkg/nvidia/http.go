@@ -61,7 +61,7 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 		if err != nil {
 			_ = logger.Log(
 				log.Message("error executing nvidia-smi executable"),
-				log.Error(err),
+				log.ErrorMessage(err),
 				log.KV{K: "executable", V: executable},
 				log.KV{K: "args", V: args},
 			)
@@ -73,7 +73,7 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 		if err != nil {
 			_ = logger.Log(
 				log.Message("error reading CSV"),
-				log.Error(err))
+				log.ErrorMessage(err))
 			return
 		}
 
@@ -95,7 +95,7 @@ func MetricsHandler(logger log.Logger, executable string, smiQueryFields []strin
 				if err != nil {
 					_ = logger.Log(
 						log.Message("Error parsing value for metric"),
-						log.Error(err),
+						log.ErrorMessage(err),
 						log.KV{K: "index", V: idx},
 						log.KV{K: "value", V: value},
 						log.KV{K: "correspondingFlag", V: metricName},
@@ -151,7 +151,7 @@ func writeMetric(logger log.Logger, w io.Writer, metricName, gpuName string, val
 	if _, err := fmt.Fprintf(w, "%s{gpu=\"%s\"} %f\n", metricName, gpuName, value); err != nil {
 		_ = logger.Log(
 			log.Message("Error writing response"),
-			log.Error(err))
+			log.ErrorMessage(err))
 	}
 }
 
